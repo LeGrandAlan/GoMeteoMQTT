@@ -1,0 +1,8 @@
+{
+  "Name": "temperatue",
+  "Type": "float",
+  "Unit": "°C",
+  "Min": 0.00,
+  "Max": 100.00,
+  "Topic": "/commit"
+}
