@@ -21,7 +21,7 @@ func ConfigFileToMap(path string) map[string]interface{} {
 	return data.(map[string]interface{})
 }
 
-func ConfigFileToArray(path string) []map[string]interface{} {
+func ConfigFileToArray(path string) []interface{} {
 	var data interface{}
 	file, err := os.Open(path)
 	if err != nil {
@@ -33,5 +33,5 @@ func ConfigFileToArray(path string) []map[string]interface{} {
 	if err != nil {
 		fmt.Println("error:", err)
 	}
-	return data.([]map[string]interface{})
+	return data.([]interface{})
 }

@@ -18,7 +18,7 @@ func (o Publisher) String() string {
 		o.Name, o.Type, o.Unit, o.Min, o.Max, o.Topic)
 }
 
-func makeFromMap(m map[string]interface{}) Publisher {
+func MakeFromMap(m map[string]interface{}) Publisher {
 	res := Publisher{
 		Name:  m["Name"].(string),
 		Type:  m["Type"].(string),
