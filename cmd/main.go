@@ -10,6 +10,6 @@ func main() {
 	fmt.Println("Hello world")
 	id, _ := uuid.NewRandom()
 	fmt.Println(id)
-	res := config.ReadConfigFile("./config/config.json").(map[string]interface{})
+	res := config.ConfigFileToMap("./config/config.json")
 	fmt.Println(res["Host"])
 }

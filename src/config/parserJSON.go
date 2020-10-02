@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-func ReadConfigFile(path string) interface{} {
+func ConfigFileToMap(path string) map[string]interface{} {
 	var data interface{}
 	file, err := os.Open(path)
 	if err != nil {
@@ -18,5 +18,20 @@ func ReadConfigFile(path string) interface{} {
 	if err != nil {
 		fmt.Println("error:", err)
 	}
-	return data
+	return data.(map[string]interface{})
+}
+
+func ConfigFileToArray(path string) []map[string]interface{} {
+	var data interface{}
+	file, err := os.Open(path)
+	if err != nil {
+		fmt.Println("error:", err)
+	}
+	defer file.Close()
+	decoder := json.NewDecoder(file)
+	err = decoder.Decode(&data)
+	if err != nil {
+		fmt.Println("error:", err)
+	}
+	return data.([]map[string]interface{})
 }
