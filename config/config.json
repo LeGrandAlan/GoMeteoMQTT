@@ -1,8 +1,4 @@
 {
   "Host": "localhost",
-  "Port": "8080",
-  "Database": {
-    "Username": "admin",
-    "Password": "admin"
-  }
+  "Port": "8080"
 }

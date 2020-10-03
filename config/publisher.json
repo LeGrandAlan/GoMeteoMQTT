@@ -1,5 +1,7 @@
 [
   {
+    "Id": "123",
+    "AirportId": "ABC",
     "Name": "temperatue",
     "Type": "float",
     "Unit": "°C",
@@ -8,6 +10,8 @@
     "Topic": "/commit"
   },
   {
+    "Id": "456",
+    "AirportId": "DEF",
     "Name": "temperatue",
     "Type": "float",
     "Unit": "°C",
