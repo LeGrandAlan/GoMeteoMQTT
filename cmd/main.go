@@ -3,6 +3,7 @@ package main
 import (
 	"../src/config"
 	"../src/publishers"
+	"../src/utils"
 	"fmt"
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 	"github.com/jasonlvhit/gocron"
@@ -20,7 +21,7 @@ func main() {
 			fmt.Sprintf("%v", conf["Host"]) + ":" +
 			fmt.Sprintf("%v", conf["Port"])
 
-		publisherClient := publishers.Connect(uri, publisher.Id)
+		publisherClient := utils.Connect(uri, publisher.Id)
 
 		go executeCronJob(publishers.PublishValue, publisherClient, publisher.Min, publisher.Max)
 	}

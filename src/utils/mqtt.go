@@ -10,11 +10,7 @@ import (
 func createClientOptions(brokerURI string, clientId string) *mqtt.ClientOptions {
 
 	opts := mqtt.NewClientOptions()
-	// AddBroker adds a broker URI to the list of brokers to be used.
-	// The format should be "scheme://host:port"
 	opts.AddBroker(brokerURI)
-	// opts.SetUsername(user)
-	// opts.SetPassword(password)
 	opts.SetClientID(clientId)
 	return opts
 
@@ -29,9 +25,9 @@ func Connect(brokerURI string, clientId string) mqtt.Client {
 	for !token.WaitTimeout(3 * time.Second) {
 	}
 	if err := token.Error(); err != nil {
-
 		log.Fatal(err)
-
+	} else {
+		fmt.Println("Connected  to broker " + brokerURI + ", with client ID " + clientId + "")
 	}
 	return client
 
