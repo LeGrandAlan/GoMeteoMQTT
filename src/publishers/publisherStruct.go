@@ -5,6 +5,7 @@ import (
 )
 
 type Publisher struct {
+	Id    string
 	Name  string
 	Type  string
 	Unit  string
@@ -14,12 +15,16 @@ type Publisher struct {
 }
 
 func (o Publisher) String() string {
+
 	return fmt.Sprintf("{ Name: %s, Type: %s, Unit: %s, Min: %.2f, Max: %.2f, Topic: %s }",
 		o.Name, o.Type, o.Unit, o.Min, o.Max, o.Topic)
+
 }
 
 func MakeFromMap(m map[string]interface{}) Publisher {
+
 	res := Publisher{
+		Id:    m["Id"].(string),
 		Name:  m["Name"].(string),
 		Type:  m["Type"].(string),
 		Unit:  m["Unit"].(string),
@@ -28,4 +33,5 @@ func MakeFromMap(m map[string]interface{}) Publisher {
 		Topic: m["Topic"].(string),
 	}
 	return res
+
 }

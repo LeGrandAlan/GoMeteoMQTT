@@ -1,6 +1,7 @@
 {
   "Host": "localhost",
-  "Port": "8080",
+  "Port": "1883",
+  "Protocol": "tcp",
   "Database": {
     "Username": "admin",
     "Password": "admin"

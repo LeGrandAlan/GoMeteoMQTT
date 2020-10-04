@@ -4,26 +4,36 @@ import (
 	"../src/config"
 	"../src/publishers"
 	"fmt"
+	mqtt "github.com/eclipse/paho.mqtt.golang"
+	"github.com/jasonlvhit/gocron"
 	"time"
 )
 
-/*func main() {
-	fmt.Println("Hello world")
-	id, _ := uuid.NewRandom()
-	fmt.Println(id)
-	res := config.ConfigFileToMap("./config/config.json")
-	fmt.Println(res["Host"])
-}*/
-
 func main() {
-	fmt.Println("TEMPERATURE CAPTOR")
-	publishers.Client = publishers.Connect("tcp://localhost:1883", "my-client-id")
 
+	conf := config.ConfigFileToMap("./config/config.json")
 	res := config.ConfigFileToArray("./config/publisher.json")
+
 	for _, object := range res {
 		publisher := publishers.MakeFromMap(object.(map[string]interface{}))
-		fmt.Println(publisher)
+		uri := fmt.Sprintf("%v", conf["Protocol"]) + "://" +
+			fmt.Sprintf("%v", conf["Host"]) + ":" +
+			fmt.Sprintf("%v", conf["Port"])
+
+		publisherClient := publishers.Connect(uri, publisher.Id)
+
+		go executeCronJob(publishers.PublishValue, publisherClient, publisher.Min, publisher.Max)
 	}
 
-	publishers.DoEvery(1000 * time.Millisecond, publishers.PublishValue)
+	for {
+		time.Sleep(100 * time.Millisecond)
+	}
+
+}
+
+func executeCronJob(task func(client mqtt.Client, min, max float64), client mqtt.Client, min, max float64) {
+
+	_ = gocron.Every(1).Second().Do(task, client, min, max)
+	<-gocron.Start()
+
 }

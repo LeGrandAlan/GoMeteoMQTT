@@ -1,18 +1,29 @@
 [
   {
+    "Id": "temperature",
     "Name": "temperatue",
     "Type": "float",
     "Unit": "°C",
-    "Min": 0.00,
-    "Max": 100.00,
-    "Topic": "/commit"
+    "Min": 10.00,
+    "Max": 20.00,
+    "Topic": "/temperature"
   },
   {
-    "Name": "temperatue",
+    "Id": "wind",
+    "Name": "wind",
     "Type": "float",
-    "Unit": "°C",
-    "Min": 0.00,
-    "Max": 100.00,
-    "Topic": "/commit"
+    "Unit": "km/h",
+    "Min": 10.00,
+    "Max": 60.00,
+    "Topic": "/wind"
+  },
+  {
+    "Id": "pressure",
+    "Name": "pressure",
+    "Type": "float",
+    "Unit": "hPA",
+    "Min": 103.00,
+    "Max": 1013.00,
+    "Topic": "/pressure"
   }
 ]
