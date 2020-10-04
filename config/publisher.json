@@ -1,6 +1,7 @@
 [
   {
     "Id": "temperature",
+    "AirportId": "ABC",
     "Name": "temperatue",
     "Type": "float",
     "Unit": "°C",
@@ -10,6 +11,7 @@
   },
   {
     "Id": "wind",
+    "AirportId": "ABC",
     "Name": "wind",
     "Type": "float",
     "Unit": "km/h",
@@ -19,6 +21,7 @@
   },
   {
     "Id": "pressure",
+    "AirportId": "DEF",
     "Name": "pressure",
     "Type": "float",
     "Unit": "hPA",
