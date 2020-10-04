@@ -23,7 +23,7 @@ func main() {
 
 		publisherClient := utils.Connect(uri, publisher.Id)
 
-		go executeCronJob(publishers.PublishValue, publisherClient, publisher.Min, publisher.Max)
+		go executeCronJob(publishers.PublishValue, publisherClient, publisher.Min, publisher.Max, publisher.Topic)
 	}
 
 	for {
@@ -32,9 +32,11 @@ func main() {
 
 }
 
-func executeCronJob(task func(client mqtt.Client, min, max float64), client mqtt.Client, min, max float64) {
+func executeCronJob(
+	task func(client mqtt.Client, min, max float64, topic string),
+	client mqtt.Client, min, max float64, topic string) {
 
-	_ = gocron.Every(1).Second().Do(task, client, min, max)
+	_ = gocron.Every(1).Second().Do(task, client, min, max, topic)
 	<-gocron.Start()
 
 }

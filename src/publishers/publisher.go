@@ -12,10 +12,10 @@ func randomValue(min, max float64) float64 {
 
 }
 
-func PublishValue(client mqtt.Client, min, max float64) {
+func PublishValue(client mqtt.Client, min, max float64, topic string) {
 
 	value := randomValue(min, max)
 	msg := fmt.Sprintf("%.2f", value)
-	client.Publish("test", 2, false, msg)
+	client.Publish(topic, 2, false, msg)
 
 }
