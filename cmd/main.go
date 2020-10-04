@@ -4,7 +4,6 @@ import (
 	"../src/config"
 	"../src/publishers"
 	"../src/utils"
-	"fmt"
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 	"github.com/jasonlvhit/gocron"
 	"time"
@@ -12,14 +11,11 @@ import (
 
 func main() {
 
-	conf := config.ConfigFileToMap("./config/config.json")
 	res := config.ConfigFileToArray("./config/publisher.json")
 
 	for _, object := range res {
 		publisher := publishers.MakeFromMap(object.(map[string]interface{}))
-		uri := fmt.Sprintf("%v", conf["Protocol"]) + "://" +
-			fmt.Sprintf("%v", conf["Host"]) + ":" +
-			fmt.Sprintf("%v", conf["Port"])
+		uri := utils.GetURIFromConf()
 
 		publisherClient := utils.Connect(uri, publisher.Id)
 

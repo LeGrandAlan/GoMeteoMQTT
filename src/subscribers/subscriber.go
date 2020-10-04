@@ -11,6 +11,7 @@ func subcribeCallback(client mqtt.Client, msg mqtt.Message) {
 }
 
 func subscriberMain() {
-	client := utils.Connect("tcp://localhost:1883", "my-client-id")
+	uri := utils.GetURIFromConf()
+	client := utils.Connect(uri, "my-client-id")
 	client.Subscribe("/commit", 0, subcribeCallback)
 }
