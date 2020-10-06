@@ -1,13 +1,13 @@
 package utils
 
 import (
-	"../config"
+	"../configUtils"
 	"fmt"
 )
 
 func GetURIFromConf() string {
 
-	conf := config.ConfigFileToMap("./config/config.json")
+	conf := configUtils.ConfigFileToMap("./configUtils/configUtils.json")
 
 	uri := fmt.Sprintf("%v", conf["Protocol"]) + "://" +
 		fmt.Sprintf("%v", conf["Host"]) + ":" +

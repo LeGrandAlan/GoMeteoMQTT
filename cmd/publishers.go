@@ -1,9 +1,9 @@
 package main
 
 import (
-	"../src/config"
-	"../src/publishers"
-	"../src/utils"
+	"./pubsub/configUtils"
+	"./pubsub/publishers"
+	"./pubsub/utils"
 	"bufio"
 	"fmt"
 	mqtt "github.com/eclipse/paho.mqtt.golang"
@@ -14,7 +14,7 @@ import (
 
 func main() {
 
-	res := config.ConfigFileToArray("./config/publisher.json")
+	res := configUtils.ConfigFileToArray("./configUtils/publisher.json")
 
 	for _, object := range res {
 		publisher := publishers.MakeFromMap(object.(map[string]interface{}))

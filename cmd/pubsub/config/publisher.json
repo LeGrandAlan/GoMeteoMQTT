@@ -1,0 +1,50 @@
+[
+  {
+    "Id": 1,
+    "AirportId": "NTE",
+    "Type": "temperature",
+    "Unit": "°C",
+    "Min": 10.00,
+    "Max": 20.00
+  },
+  {
+    "Id": 2,
+    "AirportId": "NTE",
+    "Type": "wind",
+    "Unit": "km/h",
+    "Min": 10.00,
+    "Max": 20.00
+  },
+  {
+    "Id": 3,
+    "AirportId": "NTE",
+    "Type": "pressure",
+    "Unit": "hPa",
+    "Min": 10.00,
+    "Max": 20.00
+  },
+  {
+    "Id": 4,
+    "AirportId": "BDX",
+    "Type": "temperature",
+    "Unit": "°C",
+    "Min": 10.00,
+    "Max": 20.00
+  },
+  {
+    "Id": 5,
+    "AirportId": "BDX",
+    "Type": "wind",
+    "Unit": "km/h",
+    "Min": 10.00,
+    "Max": 20.00
+  },
+  {
+    "Id": 6,
+    "AirportId": "BDX",
+    "Type": "pressure",
+    "Unit": "hPa",
+    "Min": 10.00,
+    "Max": 20.00
+  }
+]
