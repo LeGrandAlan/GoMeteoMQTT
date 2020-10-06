@@ -4,8 +4,11 @@ import (
 	"../src/config"
 	"../src/publishers"
 	"../src/utils"
+	"bufio"
+	"fmt"
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 	"github.com/jasonlvhit/gocron"
+	"os"
 	"time"
 )
 
@@ -23,8 +26,16 @@ func main() {
 		time.Sleep(100 * time.Millisecond)
 	}
 
+	fmt.Print("\nEnter :q to quit\n")
+
 	for {
 		time.Sleep(100 * time.Millisecond)
+		reader := bufio.NewReader(os.Stdin)
+		text, _ := reader.ReadString('\n')
+
+		if text == ":q\n" {
+			os.Exit(0)
+		}
 	}
 
 }
