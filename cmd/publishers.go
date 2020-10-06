@@ -14,7 +14,7 @@ import (
 
 func main() {
 
-	res := configUtils.ConfigFileToArray("./configUtils/publisher.json")
+	res := configUtils.ConfigFileToArray("./cmd/pubsub/config/publisher.json")
 
 	for _, object := range res {
 		publisher := publishers.MakeFromMap(object.(map[string]interface{}))
