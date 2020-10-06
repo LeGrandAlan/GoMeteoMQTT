@@ -1,32 +1,50 @@
 [
   {
-    "Id": "temperature",
-    "AirportId": "ABC",
-    "Name": "temperatue",
-    "Type": "float",
+    "Id": 1,
+    "AirportId": "NTE",
+    "Type": "temperature",
     "Unit": "°C",
     "Min": 10.00,
-    "Max": 20.00,
-    "Topic": "temperature"
+    "Max": 20.00
   },
   {
-    "Id": "wind",
-    "AirportId": "ABC",
-    "Name": "wind",
-    "Type": "float",
+    "Id": 2,
+    "AirportId": "NTE",
+    "Type": "wind",
     "Unit": "km/h",
     "Min": 10.00,
-    "Max": 60.00,
-    "Topic": "wind"
+    "Max": 20.00
   },
   {
-    "Id": "pressure",
-    "AirportId": "DEF",
-    "Name": "pressure",
-    "Type": "float",
-    "Unit": "hPA",
-    "Min": 103.00,
-    "Max": 1013.00,
-    "Topic": "pressure"
+    "Id": 3,
+    "AirportId": "NTE",
+    "Type": "pressure",
+    "Unit": "hPa",
+    "Min": 10.00,
+    "Max": 20.00
+  },
+  {
+    "Id": 4,
+    "AirportId": "BDX",
+    "Type": "temperature",
+    "Unit": "°C",
+    "Min": 10.00,
+    "Max": 20.00
+  },
+  {
+    "Id": 5,
+    "AirportId": "BDX",
+    "Type": "wind",
+    "Unit": "km/h",
+    "Min": 10.00,
+    "Max": 20.00
+  },
+  {
+    "Id": 6,
+    "AirportId": "BDX",
+    "Type": "pressure",
+    "Unit": "hPa",
+    "Min": 10.00,
+    "Max": 20.00
   }
 ]
