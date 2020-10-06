@@ -13,6 +13,8 @@ func createClientOptions(brokerURI string, clientId string) *mqtt.ClientOptions 
 	opts := mqtt.NewClientOptions()
 	opts.AddBroker(brokerURI)
 	opts.SetClientID(clientId)
+	opts.SetKeepAlive(3 * time.Second)
+
 	return opts
 
 }
