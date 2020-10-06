@@ -7,7 +7,7 @@
     "Unit": "°C",
     "Min": 10.00,
     "Max": 20.00,
-    "Topic": "/temperature"
+    "Topic": "temperature"
   },
   {
     "Id": "wind",
@@ -17,7 +17,7 @@
     "Unit": "km/h",
     "Min": 10.00,
     "Max": 60.00,
-    "Topic": "/wind"
+    "Topic": "wind"
   },
   {
     "Id": "pressure",
@@ -27,6 +27,6 @@
     "Unit": "hPA",
     "Min": 103.00,
     "Max": 1013.00,
-    "Topic": "/pressure"
+    "Topic": "pressure"
   }
 ]

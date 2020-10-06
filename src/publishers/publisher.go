@@ -4,6 +4,7 @@ import (
 	"fmt"
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 	"math/rand"
+	"time"
 )
 
 func randomValue(min, max float64) float64 {
@@ -15,7 +16,8 @@ func randomValue(min, max float64) float64 {
 func PublishValue(client mqtt.Client, min, max float64, topic string) {
 
 	value := randomValue(min, max)
-	msg := fmt.Sprintf("%.2f", value)
+	currentTime := time.Now()
+	msg := fmt.Sprintf("%.2f", value) + ";" + currentTime.Format("2006-01-02 03:04:05")
 	client.Publish(topic, 2, false, msg)
 
 }
