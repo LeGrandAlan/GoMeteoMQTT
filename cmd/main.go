@@ -20,6 +20,7 @@ func main() {
 		publisherClient := utils.Connect(uri, publisher.Id)
 
 		go executeCronJob(publishers.PublishValue, publisherClient, publisher.AirportId, publisher.Type, publisher.Id, publisher.Min, publisher.Max)
+		time.Sleep(100 * time.Millisecond)
 	}
 
 	for {
