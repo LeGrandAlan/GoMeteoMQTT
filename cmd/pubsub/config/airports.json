@@ -1,0 +1,12 @@
+[
+  {
+    "Id": "NTE",
+    "Name": "Nantes Atlantique",
+    "City": "Nantes"
+  },
+  {
+    "Id": "BDX",
+    "Name": "Bordeaux-Mérignac",
+    "City": "Bordeaux"
+  }
+]
