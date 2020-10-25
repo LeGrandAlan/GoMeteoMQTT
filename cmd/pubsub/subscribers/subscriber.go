@@ -2,16 +2,34 @@ package subscribers
 
 import (
 	"../utils"
-	"fmt"
 	mqtt "github.com/eclipse/paho.mqtt.golang"
+	"github.com/garyburd/redigo/redis"
+	"strconv"
+	"strings"
 )
 
-func subcribeCallback(client mqtt.Client, msg mqtt.Message) {
-	fmt.Println("Callback")
+var (
+	Pool *redis.Pool
+)
+
+func OnReceive(client mqtt.Client, msg mqtt.Message) {
+
+	strMessage := string(msg.Payload())
+	infos := parseMsg(strMessage)
+	uniqueId := int(utils.GenUniqueId())
+	captorValue := MakeFromArray(infos, uniqueId)
+
+	Pool = RedisConnect()
+	_ = Ping(Pool)
+
+	idPrefix := "goMeteoMQTT:captorValues:" + captorValue.AirportId + ":" + captorValue.Type
+
+	_ = HSetCaptorValue(captorValue, idPrefix, strconv.Itoa(uniqueId))
+
 }
 
-func subscriberMain() {
-	uri := utils.GetURIFromConf()
-	client := utils.Connect(uri, 3)
-	client.Subscribe("/commit", 0, subcribeCallback)
+func parseMsg(msg string) []string {
+
+	return strings.Split(msg, ";")
+
 }
