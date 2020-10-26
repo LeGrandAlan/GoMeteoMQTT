@@ -55,17 +55,33 @@ func HGet(id, key string) ([]byte, error) {
 	return data, err
 }
 
-func HGetAll(hash string) ([]interface{}, error) {
+func HGetAll(pool *redis.Pool, hash string) (CaptorValue, error) {
 
-	conn := Pool.Get()
+	conn := pool.Get()
 	defer conn.Close()
 
-	var data []interface{}
-	data, err := redis.Values(conn.Do("HGETALL", hash))
+	var data CaptorValue
+	datas, err := redis.Values(conn.Do("HGETALL", hash))
 	if err != nil {
 		return data, fmt.Errorf("error getting all keys/values for %s: %v", hash, err)
 	}
-	return data, err
+
+	var array []string
+
+	for i, s := range datas {
+		data := string(s.([]byte))
+		switch i {
+		case 1, 3, 5, 7, 9, 11, 13:
+			array = append(array, data)
+			break
+		}
+	}
+
+	fetchedCaptor := MakeFromRedisArray(array)
+
+	//fmt.Println(fetchedCaptor)
+
+	return fetchedCaptor, err
 }
 
 func HSetCaptorValue(captorValue CaptorValue, idPrefix, id string) error {
@@ -99,20 +115,29 @@ func HSetCaptorValue(captorValue CaptorValue, idPrefix, id string) error {
 	return err
 }
 
-func ScanByAirportAndType(airportId, captorType string) ([]interface{}, error) {
+func ScanByAirportAndType(pool *redis.Pool, airportId, captorType string) ([]CaptorValue, error) {
 
-	conn := Pool.Get()
+	conn := pool.Get()
 	defer conn.Close()
 
 	patern := "*" + airportId + "*" + captorType + "*"
 
 	var data []interface{}
 	data, err := redis.Values(conn.Do("SCAN", 0, "MATCH", patern, "COUNT", "1000000000"))
-	fmt.Println(data)
+
+	var captorValues []CaptorValue
 	if err != nil {
-		return data, fmt.Errorf("error scanning for %s: %v", patern, err)
+		return captorValues, fmt.Errorf("error scanning for %s: %v", patern, err)
 	}
-	return data, err
+
+	keys, _ := redis.Strings(data[1], nil)
+
+	for _, id := range keys {
+		captorValue, _ := HGetAll(pool, id)
+		captorValues = append(captorValues, captorValue)
+	}
+
+	return captorValues, err
 
 }
 
