@@ -68,7 +68,7 @@ func MakeFromArray(a []string, uniqueId int) CaptorValue {
 
 func MakeFromRedisArray(a []string) CaptorValue {
 
-	layout := "2006-01-02 03:04:05"
+	layout := "2006-01-02 03:04:05 +0000 UTC"
 
 	uniqueId, _ := strconv.Atoi(a[0])
 	captorId, _ := strconv.Atoi(a[1])

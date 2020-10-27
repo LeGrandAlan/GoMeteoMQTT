@@ -53,6 +53,7 @@ func HGet(id, key string) ([]byte, error) {
 		return data, fmt.Errorf("error getting key %s for %s: %v", key, id, err)
 	}
 	return data, err
+
 }
 
 func HGetAll(pool *redis.Pool, hash string) (CaptorValue, error) {
@@ -79,9 +80,8 @@ func HGetAll(pool *redis.Pool, hash string) (CaptorValue, error) {
 
 	fetchedCaptor := MakeFromRedisArray(array)
 
-	//fmt.Println(fetchedCaptor)
-
 	return fetchedCaptor, err
+
 }
 
 func HSetCaptorValue(captorValue CaptorValue, idPrefix, id string) error {
@@ -103,16 +103,18 @@ func HSetCaptorValue(captorValue CaptorValue, idPrefix, id string) error {
 		keysValues = append(keysValues, value)
 	}
 
-	_, _ = conn.Do("HMSET", keysValues...)
+	_, err := conn.Do("HMSET", keysValues...)
 
-	_, _ = conn.Do("SADD", "goMeteoMQTT:all-captorValues", id)
+	// _, err2 := conn.Do("SADD", "goMeteoMQTT:all-captorValues", id)
 
-	_, err := conn.Do("ZADD", "goMeteoMQTT:dateIndex", captorValue.StringDate, id)
+	// _, err3 := conn.Do("ZADD", "goMeteoMQTT:dateIndex", captorValue.StringDate, id)
 
 	if err != nil {
 		return fmt.Errorf("error setting hash keys %v", err)
 	}
+
 	return err
+
 }
 
 func ScanByAirportAndType(pool *redis.Pool, airportId, captorType string) ([]CaptorValue, error) {
@@ -138,6 +140,22 @@ func ScanByAirportAndType(pool *redis.Pool, airportId, captorType string) ([]Cap
 	}
 
 	return captorValues, err
+
+}
+
+func ScanByAirportAndTypeAndDate(pool *redis.Pool, airportId, captorType string, dateMin, dateMax time.Time) []CaptorValue {
+
+	captorValues, _ := ScanByAirportAndType(pool, airportId, captorType)
+
+	var result []CaptorValue
+	for i := range captorValues {
+		date := captorValues[i].Date
+		if date.After(dateMin) && date.Before(dateMax) {
+			result = append(result, captorValues[i])
+		}
+	}
+
+	return result
 
 }
 
