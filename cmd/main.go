@@ -3,8 +3,6 @@ package main
 import (
 	"github.com/go-chi/chi"
 
-	_ "./docs"
-
 	"log"
 	"net/http"
 
@@ -20,6 +18,7 @@ func InitializeRouter() chi.Router {
 		httpSwagger.URL("http://localhost:8001/swagger/doc.json"), //The url pointing to API definition"
 	))
 
+	r.Get("/airports", controller.AirportList)
 	r.Get("/sensor", controller.SensorIndex)
 	r.Get("/sensorAverage", controller.SensorIndexAvg)
 
