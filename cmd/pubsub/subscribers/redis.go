@@ -208,7 +208,7 @@ func ScanByAirportAndType(pool *redis.Pool, airportId, captorType string) ([]Cap
 	conn := pool.Get()
 	defer conn.Close()
 
-	patern := "*" + airportId + "*" + captorType + "*"
+	patern := "goMeteoMQTT:captorValues:*" + airportId + "*" + captorType + "*"
 
 	var data []interface{}
 	data, err := redis.Values(conn.Do("SCAN", 0, "MATCH", patern, "COUNT", "1000000000"))
