@@ -1,4 +1,4 @@
-package airportspackage
+package models
 
 import (
 	"fmt"
@@ -17,7 +17,7 @@ func (o Airport) String() string {
 
 }
 
-func MakeFromMap(m map[string]interface{}) Airport {
+func AirportMapper(m map[string]interface{}) Airport {
 	res := Airport{
 		Id:   m["Id"].(string),
 		Name: m["Name"].(string),
