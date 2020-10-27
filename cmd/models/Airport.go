@@ -13,7 +13,7 @@ type Airport struct {
 func (o Airport) String() string {
 
 	return fmt.Sprintf("{ Id: %s, Name: %s, City: %s }",
-		o.Id, o.Name)
+		o.Id, o.Name, o.City)
 
 }
 

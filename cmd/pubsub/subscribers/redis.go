@@ -1,6 +1,7 @@
 package subscribers
 
 import (
+	"../../models"
 	"fmt"
 	"github.com/garyburd/redigo/redis"
 	"reflect"
@@ -42,21 +43,7 @@ func Ping(pool *redis.Pool) error {
 	return nil
 }
 
-func HGet(id, key string) ([]byte, error) {
-
-	conn := Pool.Get()
-	defer conn.Close()
-
-	var data []byte
-	data, err := redis.Bytes(conn.Do("HGET", id, key))
-	if err != nil {
-		return data, fmt.Errorf("error getting key %s for %s: %v", key, id, err)
-	}
-	return data, err
-
-}
-
-func HGetAll(pool *redis.Pool, hash string) (CaptorValue, error) {
+func HGetAllCaptors(pool *redis.Pool, hash string) (CaptorValue, error) {
 
 	conn := pool.Get()
 	defer conn.Close()
@@ -81,6 +68,79 @@ func HGetAll(pool *redis.Pool, hash string) (CaptorValue, error) {
 	fetchedCaptor := MakeFromRedisArray(array)
 
 	return fetchedCaptor, err
+
+}
+
+func HGetAllAirports(pool *redis.Pool, hash string) (models.Airport, error) {
+
+	conn := pool.Get()
+	defer conn.Close()
+
+	var data models.Airport
+	datas, err := redis.Values(conn.Do("HGETALL", hash))
+	if err != nil {
+		return data, fmt.Errorf("error getting all keys/values for %s: %v", hash, err)
+	}
+
+	airportMap := make(map[string]interface{})
+	for i, s := range datas {
+		data := string(s.([]byte))
+		switch i {
+		case 1:
+			airportMap["Id"] = data
+			break
+		case 3:
+			airportMap["Name"] = data
+			break
+		case 5:
+			airportMap["City"] = data
+			break
+		}
+	}
+
+	fetchedAirport := models.AirportMapper(airportMap)
+
+	fmt.Println(fetchedAirport)
+
+	return fetchedAirport, err
+
+}
+
+func HSetAirportIfNoExists(pool *redis.Pool, airport models.Airport) error {
+
+	conn := pool.Get()
+	defer conn.Close()
+
+	var keysValues []interface{}
+	keysValues = append(keysValues, "goMeteoMQTT:airport:"+airport.Id)
+
+	values := reflect.ValueOf(airport)
+	num := values.NumField()
+
+	for i := 0; i < num; i++ {
+		key := values.Type().Field(i).Name
+		value := values.Field(i)
+
+		keysValues = append(keysValues, key)
+		keysValues = append(keysValues, value)
+	}
+
+	data, err1 := conn.Do("EXISTS", airport.Id)
+
+	if err1 != nil {
+		return fmt.Errorf("error setting hash keys %v", err1)
+	}
+
+	var err2 error
+	if int(data.(int64)) == 0 {
+		_, err2 := conn.Do("HMSET", keysValues...)
+
+		if err2 != nil {
+			return fmt.Errorf("error setting hash keys %v", err1)
+		}
+	}
+
+	return err2
 
 }
 
@@ -117,6 +177,32 @@ func HSetCaptorValue(captorValue CaptorValue, idPrefix, id string) error {
 
 }
 
+func ScanAirports(pool *redis.Pool) ([]models.Airport, error) {
+
+	conn := pool.Get()
+	defer conn.Close()
+
+	patern := "goMeteoMQTT:airport:*"
+
+	var data []interface{}
+	data, err := redis.Values(conn.Do("SCAN", 0, "MATCH", patern, "COUNT", "1000000000"))
+
+	var airports []models.Airport
+	if err != nil {
+		return airports, fmt.Errorf("error scanning for %s: %v", patern, err)
+	}
+
+	keys, _ := redis.Strings(data[1], nil)
+
+	for _, id := range keys {
+		airport, _ := HGetAllAirports(pool, id)
+		airports = append(airports, airport)
+	}
+
+	return airports, err
+
+}
+
 func ScanByAirportAndType(pool *redis.Pool, airportId, captorType string) ([]CaptorValue, error) {
 
 	conn := pool.Get()
@@ -135,7 +221,7 @@ func ScanByAirportAndType(pool *redis.Pool, airportId, captorType string) ([]Cap
 	keys, _ := redis.Strings(data[1], nil)
 
 	for _, id := range keys {
-		captorValue, _ := HGetAll(pool, id)
+		captorValue, _ := HGetAllCaptors(pool, id)
 		captorValues = append(captorValues, captorValue)
 	}
 
