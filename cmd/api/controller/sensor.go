@@ -20,17 +20,15 @@ func getParemeter(r *http.Request, name string) string {
 	return res
 }
 
-// http://localhost:8001/sensor?
-// airportId=NTE
-// &sensorType=wind
-// &infDate=2020-10-27+00%3A00%3A00+UTC
-// &supDate=2020-10-27+23%3A00%3A00+UTC
-
 // SensorIndex godoc
 // @Summary Get sensor values
 // @Description Retrieve sensor values
 // @ID get-sensor-value
-// @Accept  json
+// @Param airportId query string false "airport identifier" Enums(NTE, BDX)
+// @Param sensorType query string false "sensor type" Enums(temperature, wind, pressure)
+// @Param infDate query string false "low date of the search interval : '2009-11-10 23:00:00 UTC'"
+// @Param supDate query string false "high date of the search interval : '2009-11-10 23:00:00 UTC'"
+// @Accept json
 // @Success 200 {array} model.CaptorValue
 // @Produce  json
 // @Router /sensor [get]
@@ -75,16 +73,15 @@ func SensorIndex(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// http://localhost:8001/sensorAverage?
-// airportId=NTE
-// date=2020-10-23
-
 // SensorIndexAvg godoc
 // @Summary Get sensor values average
 // @Description Retrieve the average values of the sensors of each type
 // @ID get-average-sensor-value
+// @Param airportId query string false "airport identifier" Enums(NTE, BDX)
+// @Param date query string false "low date of the search interval : '2009-11-10'"
 // @Accept  json
 // @Produce  json
+// @Success 200 {array} model.AverageCaptorValue
 // @Router /sensorAverage [get]
 func SensorIndexAvg(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json;charset=UTF-8")
