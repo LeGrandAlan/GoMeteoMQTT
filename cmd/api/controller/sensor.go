@@ -1,15 +1,13 @@
-package main
+package controller
 
 import (
-	"./pubsub/subscribers"
+	"../../pubsub/subscribers"
+	"encoding/json"
+	"net/http"
 	"time"
 
-	"encoding/json"
 	"fmt"
 	"github.com/garyburd/redigo/redis"
-	"github.com/gorilla/mux"
-	"log"
-	"net/http"
 )
 
 var (
@@ -27,6 +25,15 @@ func getParemeter(r *http.Request, name string) string {
 // &sensorType=wind
 // &infDate=2020-10-27+00%3A00%3A00+UTC
 // &supDate=2020-10-27+23%3A00%3A00+UTC
+
+// SensorIndex godoc
+// @Summary Get sensor values
+// @Description Retrieve sensor values
+// @ID get-sensor-value
+// @Accept  json
+// @Success 200 {array} model.CaptorValue
+// @Produce  json
+// @Router /sensor [get]
 func SensorIndex(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json;charset=UTF-8")
 
@@ -53,6 +60,9 @@ func SensorIndex(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("parse error", err.Error())
 	}
 
+	// init redis database connection
+	Pool = subscribers.RedisConnect()
+
 	if infDate == "" || infDate == "" {
 		sensorValues, _ := subscribers.ScanByAirportAndType(Pool, airportId, sensorType)
 		json.NewEncoder(w).Encode(sensorValues)
@@ -68,6 +78,14 @@ func SensorIndex(w http.ResponseWriter, r *http.Request) {
 // http://localhost:8001/sensorAverage?
 // airportId=NTE
 // date=2020-10-23
+
+// SensorIndexAvg godoc
+// @Summary Get sensor values average
+// @Description Retrieve the average values of the sensors of each type
+// @ID get-average-sensor-value
+// @Accept  json
+// @Produce  json
+// @Router /sensorAverage [get]
 func SensorIndexAvg(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json;charset=UTF-8")
 
@@ -82,6 +100,8 @@ func SensorIndexAvg(w http.ResponseWriter, r *http.Request) {
 
 	start := time.Date(t1.Year(), t1.Month(), t1.Day(), 0, 0, 0, 0, t1.Location())
 	end := time.Date(t1.Year(), t1.Month(), t1.Day(), 23, 59, 59, 0, t1.Location())
+
+	Pool = subscribers.RedisConnect()
 
 	sensorValues := subscribers.ScanByAirportAndTypeAndDate(Pool, airportId, "", start, end)
 
@@ -105,26 +125,4 @@ func SensorIndexAvg(w http.ResponseWriter, r *http.Request) {
 		sensorValuesAvg["pressure"],
 		sensorValuesAvg["wind"])))
 
-}
-
-func InitializeRouter() *mux.Router {
-
-	// StrictSlash is true => redirect /airports/ to /airports
-	router := mux.NewRouter().StrictSlash(true)
-
-	router.Methods("GET").Path("/sensor").Name("SensorIndex").HandlerFunc(SensorIndex)
-	router.Methods("GET").Path("/sensorAverage").Name("SensorIndexAvg").HandlerFunc(SensorIndexAvg)
-
-	return router
-}
-
-func main() {
-
-	// init redis database connection
-	Pool = subscribers.RedisConnect()
-
-	// set routes
-	router := InitializeRouter()
-
-	log.Fatal(http.ListenAndServe(":8001", router))
 }
