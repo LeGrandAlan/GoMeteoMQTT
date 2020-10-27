@@ -20,6 +20,17 @@ func getParemeter(r *http.Request, name string) string {
 	return res
 }
 
+func AirportList(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-type", "application/json;charset=UTF-8")
+
+	// init redis database connection
+	Pool = subscribers.RedisConnect()
+
+	airports, _ := subscribers.ScanAirports(Pool)
+	fmt.Println(airports)
+	json.NewEncoder(w).Encode(airports)
+}
+
 // SensorIndex godoc
 // @Summary Get sensor values
 // @Description Retrieve sensor values
@@ -34,6 +45,7 @@ func getParemeter(r *http.Request, name string) string {
 // @Router /sensor [get]
 func SensorIndex(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json;charset=UTF-8")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 
 	airportId := getParemeter(r, "airportId")
 	sensorType := getParemeter(r, "sensorType")
