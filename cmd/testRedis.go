@@ -3,11 +3,10 @@ package main
 import (
 	"./pubsub/subscribers"
 	"fmt"
-	"github.com/garyburd/redigo/redis"
 )
 
 var (
-	Pool *redis.Pool
+// Pool *redis.Pool
 )
 
 func main() {
