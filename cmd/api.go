@@ -2,6 +2,7 @@ package main
 
 import (
 	"./pubsub/subscribers"
+	"time"
 
 	"encoding/json"
 	"fmt"
@@ -21,57 +22,68 @@ func getParemeter(r *http.Request, name string) string {
 	return res
 }
 
-// http://localhost:8001/sensor?airportId=NTE&sensorType=wind
+// http://localhost:8001/sensor?
+// airportId=NTE
+// &sensorType=wind
+// &infDate=2020-10-27+00%3A00%3A00+UTC
+// &supDate=2020-10-27+23%3A00%3A00+UTC
 func SensorIndex(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json;charset=UTF-8")
 
 	airportId := getParemeter(r, "airportId")
-	fmt.Println(airportId)
-
 	sensorType := getParemeter(r, "sensorType")
-	fmt.Println(sensorType)
-
 	sensorId := getParemeter(r, "sensorId")
 	fmt.Println(sensorId)
 
-	infDate := getParemeter(r, "lowDate")
-	fmt.Println(infDate)
+	// format "2009-11-10 23:00:00 UTC"
+	infDate := getParemeter(r, "infDate")
+	// fmt.Println(infDate)
 
-	supDate := getParemeter(r, "higDate")
-	fmt.Println(supDate)
+	t1, err := time.Parse("2006-01-02 15:04:05 UTC", infDate)
+	if err != nil {
+		fmt.Println("parse error", err.Error())
+	}
 
-	sensorValues, _ := subscribers.ScanByAirportAndType(Pool, airportId, sensorType)
+	// format "2020-10-27 10:04:35 UTC"
+	supDate := getParemeter(r, "supDate")
+	// fmt.Println(supDate)
 
-	/*
-	    pathParams := mux.Vars(r)
+	t2, err := time.Parse("2006-01-02 15:04:05 UTC", supDate)
+	if err != nil {
+		fmt.Println("parse error", err.Error())
+	}
 
-	    var sensorType = -1
-		var err error
-		if val, ok := pathParams["type"];
-		ok {
-			fmt.Println(val)
-			sensorType, err = strconv.Atoi(val)
-			if err != nil {
-				w.WriteHeader(http.StatusInternalServerError)
-				return
-			}
-		}
-	*/
-
-	json.NewEncoder(w).Encode(sensorValues)
+	if infDate == "" || infDate == "" {
+		sensorValues, _ := subscribers.ScanByAirportAndType(Pool, airportId, sensorType)
+		json.NewEncoder(w).Encode(sensorValues)
+	} else {
+		start := time.Date(t1.Year(), t1.Month(), t1.Day(), t1.Hour(), t1.Minute(), t1.Second(), 0, t1.Location())
+		end := time.Date(t2.Year(), t2.Month(), t2.Day(), t2.Hour(), t2.Minute(), t2.Second(), 0, t2.Location())
+		fmt.Println(start)
+		sensorValues := subscribers.ScanByAirportAndTypeAndDate(Pool, airportId, sensorType, start, end)
+		json.NewEncoder(w).Encode(sensorValues)
+	}
 }
 
-// http://localhost:8001/sensorAverage?airportId=NTE
+// http://localhost:8001/sensorAverage?
+// airportId=NTE
+// date=2020-10-23
 func SensorIndexAvg(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json;charset=UTF-8")
 
 	airportId := getParemeter(r, "airportId")
-	fmt.Println(airportId)
 
 	date := getParemeter(r, "date")
-	fmt.Println(date)
 
-	sensorValues, _ := subscribers.ScanByAirportAndType(Pool, airportId, "")
+	t1, err := time.Parse("2006-01-02", date)
+	if err != nil {
+		fmt.Println("parse error", err.Error())
+	}
+
+	start := time.Date(t1.Year(), t1.Month(), t1.Day(), 0, 0, 0, 0, t1.Location())
+	end := time.Date(t1.Year(), t1.Month(), t1.Day(), 23, 59, 59, 0, t1.Location())
+
+	sensorValues := subscribers.ScanByAirportAndTypeAndDate(Pool, airportId, "", start, end)
 
 	sensorValuesCum := map[string]float64{}
 	sensorValuesNb := map[string]float64{}
@@ -86,7 +98,9 @@ func SensorIndexAvg(w http.ResponseWriter, r *http.Request) {
 		sensorValuesAvg[k] = v / sensorValuesNb[k]
 	}
 
-	w.Write([]byte(fmt.Sprintf(`{"temperature": "%f", "pressure": "%f", "wind": "%f"}`,
+	w.Write([]byte(fmt.Sprintf(`{"airportId": "%s", "date": "%s", "temperature": "%f", "pressure": "%f", "wind": "%f"}`,
+		airportId,
+		date,
 		sensorValuesAvg["temperature"],
 		sensorValuesAvg["pressure"],
 		sensorValuesAvg["wind"])))
