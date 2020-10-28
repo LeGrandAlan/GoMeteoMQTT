@@ -14,18 +14,18 @@ type CsvWriter struct {
 	file      *os.File
 }
 
-func PrepareFile(filename string) *CsvWriter {
+func PrepareFile(filename string, mutex *sync.Mutex) *CsvWriter {
+	mutex.Lock()
 	csvFile, err := os.OpenFile("data/"+filename, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0755)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	w := csv.NewWriter(csvFile)
-	return &CsvWriter{csvWriter: w, mutex: &sync.Mutex{}, file: csvFile}
+	return &CsvWriter{csvWriter: w, mutex: mutex, file: csvFile}
 }
 
 func (w *CsvWriter) Write(row string) {
-	w.mutex.Lock()
 	err := w.csvWriter.Write([]string{row})
 	fmt.Println(fmt.Sprintf("{ row: %s }", row))
 
