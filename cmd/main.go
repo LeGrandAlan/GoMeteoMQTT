@@ -21,6 +21,7 @@ func InitializeRouter() chi.Router {
 	))
 
 	r.Get("/airports", controller.AirportList)
+	r.Get("/captors", controller.CaptorsValues)
 	r.Get("/sensor", controller.SensorIndex)
 	r.Get("/sensorAverage", controller.SensorIndexAvg)
 

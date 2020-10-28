@@ -22,6 +22,37 @@ func getParemeter(r *http.Request, name string) string {
 
 func AirportList(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json;charset=UTF-8")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
+	// init redis database connection
+	Pool = subscribers.RedisConnect()
+
+	airports, _ := subscribers.ScanAirports(Pool)
+	json.NewEncoder(w).Encode(airports)
+}
+
+func CaptorsValues(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-type", "application/json;charset=UTF-8")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
+	// init redis database connection
+	Pool = subscribers.RedisConnect()
+
+	airportId := getParemeter(r, "airportId")
+	sensorType := getParemeter(r, "sensorType")
+	requestStartDate := getParemeter(r, "startDate")
+	requestEndDate := getParemeter(r, "endDate")
+
+	startDate, _ := time.Parse("2006-01-02", requestStartDate)
+	endDate, _ := time.Parse("2006-01-02", requestEndDate)
+	endDate = endDate.Add(time.Hour * 24)
+
+	airports := subscribers.ScanByAirportAndTypeAndDate(Pool, airportId, sensorType, startDate, endDate)
+	json.NewEncoder(w).Encode(airports)
+}
+
+func Captor(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-type", "application/json;charset=UTF-8")
 
 	// init redis database connection
 	Pool = subscribers.RedisConnect()
