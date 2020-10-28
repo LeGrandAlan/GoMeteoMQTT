@@ -46,5 +46,77 @@
     "Unit": "hPa",
     "Min": 10.00,
     "Max": 20.00
+  },
+  {
+    "Id": 7,
+    "AirportId": "RAK",
+    "Type": "temperature",
+    "Unit": "°C",
+    "Min": 10.00,
+    "Max": 20.00
+  },
+  {
+    "Id": 8,
+    "AirportId": "RAK",
+    "Type": "wind",
+    "Unit": "km/h",
+    "Min": 10.00,
+    "Max": 20.00
+  },
+  {
+    "Id": 9,
+    "AirportId": "RAK",
+    "Type": "pressure",
+    "Unit": "hPa",
+    "Min": 10.00,
+    "Max": 20.00
+  },
+  {
+    "Id": 10,
+    "AirportId": "LGW",
+    "Type": "temperature",
+    "Unit": "°C",
+    "Min": 10.00,
+    "Max": 20.00
+  },
+  {
+    "Id": 11,
+    "AirportId": "LGW",
+    "Type": "wind",
+    "Unit": "km/h",
+    "Min": 10.00,
+    "Max": 20.00
+  },
+  {
+    "Id": 12,
+    "AirportId": "LGW",
+    "Type": "pressure",
+    "Unit": "hPa",
+    "Min": 10.00,
+    "Max": 20.00
+  },
+  {
+    "Id": 13,
+    "AirportId": "SEA",
+    "Type": "temperature",
+    "Unit": "°C",
+    "Min": 10.00,
+    "Max": 20.00
+  },
+  {
+    "Id": 14,
+    "AirportId": "SEA",
+    "Type": "wind",
+    "Unit": "km/h",
+    "Min": 10.00,
+    "Max": 20.00
+  },
+  {
+    "Id": 15,
+    "AirportId": "SEA",
+    "Type": "pressure",
+    "Unit": "hPa",
+    "Min": 10.00,
+    "Max": 20.00
   }
 ]

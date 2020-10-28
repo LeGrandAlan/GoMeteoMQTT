@@ -163,10 +163,6 @@ func HSetCaptorValue(captorValue models.CaptorValue, idPrefix, id string) error 
 
 	_, err := conn.Do("HMSET", keysValues...)
 
-	// _, err2 := conn.Do("SADD", "goMeteoMQTT:all-captorValues", id)
-
-	// _, err3 := conn.Do("ZADD", "goMeteoMQTT:dateIndex", captorValue.StringDate, id)
-
 	if err != nil {
 		return fmt.Errorf("error setting hash keys %v", err)
 	}

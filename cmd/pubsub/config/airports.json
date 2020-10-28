@@ -8,5 +8,20 @@
     "Id": "BDX",
     "Name": "Bordeaux-Mérignac",
     "City": "Bordeaux"
+  },
+  {
+    "Id": "RAK",
+    "Name": "Aéroport de Marrakech-Ménara",
+    "City": "Marrakesh"
+  },
+  {
+    "Id": "LGW",
+    "Name": "Gatwick Airport",
+    "City": "Londre"
+  },
+  {
+    "Id": "SEA",
+    "Name": "Seattle-Tacoma International Airport",
+    "City": "Seattle"
   }
 ]
