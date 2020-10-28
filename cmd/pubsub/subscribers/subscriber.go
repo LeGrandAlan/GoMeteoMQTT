@@ -1,6 +1,7 @@
 package subscribers
 
 import (
+	"../../models"
 	"../utils"
 	"fmt"
 	mqtt "github.com/eclipse/paho.mqtt.golang"
@@ -18,7 +19,7 @@ func OnReceive(client mqtt.Client, msg mqtt.Message) {
 	strMessage := string(msg.Payload())
 	infos := parseMsg(strMessage)
 	uniqueId := int(utils.GenUniqueId())
-	captorValue := MakeFromArray(infos, uniqueId)
+	captorValue := models.MakeCaptorValueFromArray(infos, uniqueId)
 
 	fmt.Println(uniqueId)
 

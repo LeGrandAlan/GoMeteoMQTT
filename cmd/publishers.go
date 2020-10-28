@@ -1,7 +1,7 @@
 package main
 
 import (
-	"./pubsub/configUtils"
+	"./models"
 	"./pubsub/publishers"
 	"./pubsub/utils"
 	"bufio"
@@ -14,10 +14,10 @@ import (
 
 func main() {
 
-	res := configUtils.ConfigFileToArray("./cmd/pubsub/config/publisher.json")
+	res := utils.ConfigFileToArray("./cmd/pubsub/config/publisher.json")
 
 	for _, object := range res {
-		publisher := publishers.MakeFromMap(object.(map[string]interface{}))
+		publisher := models.MakePublisherFromMap(object.(map[string]interface{}))
 		uri := utils.GetURIFromConf()
 
 		publisherClient := utils.Connect(uri, publisher.Id)

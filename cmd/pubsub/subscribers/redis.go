@@ -43,12 +43,12 @@ func Ping(pool *redis.Pool) error {
 	return nil
 }
 
-func HGetAllCaptors(pool *redis.Pool, hash string) (CaptorValue, error) {
+func HGetAllCaptors(pool *redis.Pool, hash string) (models.CaptorValue, error) {
 
 	conn := pool.Get()
 	defer conn.Close()
 
-	var data CaptorValue
+	var data models.CaptorValue
 	datas, err := redis.Values(conn.Do("HGETALL", hash))
 	if err != nil {
 		return data, fmt.Errorf("error getting all keys/values for %s: %v", hash, err)
@@ -65,7 +65,7 @@ func HGetAllCaptors(pool *redis.Pool, hash string) (CaptorValue, error) {
 		}
 	}
 
-	fetchedCaptor := MakeFromRedisArray(array)
+	fetchedCaptor := models.MakeCaptorValueFromRedisArray(array)
 
 	return fetchedCaptor, err
 
@@ -142,7 +142,7 @@ func HSetAirportIfNoExists(pool *redis.Pool, airport models.Airport) error {
 
 }
 
-func HSetCaptorValue(captorValue CaptorValue, idPrefix, id string) error {
+func HSetCaptorValue(captorValue models.CaptorValue, idPrefix, id string) error {
 
 	conn := Pool.Get()
 	defer conn.Close()
@@ -201,7 +201,7 @@ func ScanAirports(pool *redis.Pool) ([]models.Airport, error) {
 
 }
 
-func ScanByAirportAndType(pool *redis.Pool, airportId, captorType string) ([]CaptorValue, error) {
+func ScanByAirportAndType(pool *redis.Pool, airportId, captorType string) ([]models.CaptorValue, error) {
 
 	conn := pool.Get()
 	defer conn.Close()
@@ -211,7 +211,7 @@ func ScanByAirportAndType(pool *redis.Pool, airportId, captorType string) ([]Cap
 	var data []interface{}
 	data, err := redis.Values(conn.Do("SCAN", 0, "MATCH", patern, "COUNT", "1000000000"))
 
-	var captorValues []CaptorValue
+	var captorValues []models.CaptorValue
 	if err != nil {
 		return captorValues, fmt.Errorf("error scanning for %s: %v", patern, err)
 	}
@@ -227,11 +227,11 @@ func ScanByAirportAndType(pool *redis.Pool, airportId, captorType string) ([]Cap
 
 }
 
-func ScanByAirportAndTypeAndDate(pool *redis.Pool, airportId, captorType string, dateMin, dateMax time.Time) []CaptorValue {
+func ScanByAirportAndTypeAndDate(pool *redis.Pool, airportId, captorType string, dateMin, dateMax time.Time) []models.CaptorValue {
 
 	captorValues, _ := ScanByAirportAndType(pool, airportId, captorType)
 
-	var result []CaptorValue
+	var result []models.CaptorValue
 	for i := range captorValues {
 		date := captorValues[i].Date
 		if date.After(dateMin) && date.Before(dateMax) {

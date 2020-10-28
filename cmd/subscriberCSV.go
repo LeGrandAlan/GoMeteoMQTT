@@ -1,10 +1,9 @@
 package main
 
 import (
-	"./pubsub/configUtils"
-	"./pubsub/utils"
-	"./pubsub/subscribers"
 	"./models"
+	"./pubsub/subscribers"
+	"./pubsub/utils"
 	"fmt"
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 	"strings"
@@ -12,7 +11,7 @@ import (
 )
 
 func main() {
-	airports := configUtils.ConfigFileToArray("./cmd/examples/airports.json")
+	airports := utils.ConfigFileToArray("./cmd/examples/airports.json")
 
 	topics := GetTopicAirport(airports)
 

@@ -1,4 +1,4 @@
-package publishers
+package models
 
 import (
 	"fmt"
@@ -20,7 +20,7 @@ func (o Publisher) String() string {
 
 }
 
-func MakeFromMap(m map[string]interface{}) Publisher {
+func MakePublisherFromMap(m map[string]interface{}) Publisher {
 
 	res := Publisher{
 		Id:        int(m["Id"].(float64)),

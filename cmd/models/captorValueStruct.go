@@ -1,4 +1,4 @@
-package subscribers
+package models
 
 import (
 	"fmt"
@@ -22,7 +22,7 @@ func (o CaptorValue) String() string {
 
 }
 
-func MakeFromMap(m map[string]interface{}) CaptorValue {
+func MakeCaptorValueFromMap(m map[string]interface{}) CaptorValue {
 
 	res := CaptorValue{
 		Id:        int(m["Id"].(uint64)),
@@ -36,7 +36,7 @@ func MakeFromMap(m map[string]interface{}) CaptorValue {
 
 }
 
-func MakeFromArray(a []string, uniqueId int) CaptorValue {
+func MakeCaptorValueFromArray(a []string, uniqueId int) CaptorValue {
 
 	layout := "2006-01-02 03:04:05"
 
@@ -59,7 +59,7 @@ func MakeFromArray(a []string, uniqueId int) CaptorValue {
 
 }
 
-func MakeFromRedisArray(a []string) CaptorValue {
+func MakeCaptorValueFromRedisArray(a []string) CaptorValue {
 
 	layout := "2006-01-02 03:04:05 +0000 UTC"
 

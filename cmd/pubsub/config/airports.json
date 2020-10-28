@@ -1,12 +1,12 @@
 [
   {
     "Id": "NTE",
-    "Name": "Nantes Atlantique Airport",
+    "Name": "Nantes Atlantique ",
     "City": "Nantes"
   },
   {
     "Id": "BDX",
-    "Name": "Aéroport de Bordeaux",
+    "Name": "Bordeaux-Mérignac",
     "City": "Bordeaux"
   }
 ]
