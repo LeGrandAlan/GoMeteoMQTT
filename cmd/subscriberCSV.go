@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	airports := utils.ConfigFileToArray("./cmd/examples/airports.json")
+	airports := utils.ConfigFileToArray("./cmd/pubsub/config/airports.json")
 
 	topics := GetTopicAirport(airports)
 
