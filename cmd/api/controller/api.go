@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"time"
 
+	_ "../../models"
 	"fmt"
 	"github.com/garyburd/redigo/redis"
 )
@@ -20,6 +21,14 @@ func getParemeter(r *http.Request, name string) string {
 	return res
 }
 
+// AirportList godoc
+// @Summary Get list of aiports
+// @Description Retrieve aiports list
+// @ID get-aiport-list
+// @Accept json
+// @Success 200 {array} models.Airport
+// @Produce  json
+// @Router /airports [get]
 func AirportList(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json;charset=UTF-8")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
@@ -31,6 +40,18 @@ func AirportList(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(airports)
 }
 
+// CaptorsValues godoc
+// @Summary Get captors values
+// @Description Retrieve a list of captors values
+// @ID get-captors--value-list
+// @Param airportId query string false "filter by airport identifier" Enums(NTE, BDX)
+// @Param sensorType query string false "filter by sensor type" Enums(temperature, wind, pressure)
+// @Param requestStartDate query string false "start date of search"
+// @Param requestEndDate query string false "end date of search"
+// @Accept json
+// @Success 200 {array} models.CaptorValue
+// @Produce  json
+// @Router /captors [get]
 func CaptorsValues(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json;charset=UTF-8")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
@@ -71,7 +92,7 @@ func Captor(w http.ResponseWriter, r *http.Request) {
 // @Param infDate query string false "low date of the search interval : '2009-11-10 23:00:00 UTC'"
 // @Param supDate query string false "high date of the search interval : '2009-11-10 23:00:00 UTC'"
 // @Accept json
-// @Success 200 {array} model.CaptorValue
+// @Success 200 {array} swaggerModel.CaptorValue
 // @Produce  json
 // @Router /sensor [get]
 func SensorIndex(w http.ResponseWriter, r *http.Request) {
@@ -124,7 +145,7 @@ func SensorIndex(w http.ResponseWriter, r *http.Request) {
 // @Param date query string false "low date of the search interval : '2009-11-10'"
 // @Accept  json
 // @Produce  json
-// @Success 200 {array} model.AverageCaptorValue
+// @Success 200 {array} swaggerModel.AverageCaptorValue
 // @Router /sensorAverage [get]
 func SensorIndexAvg(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json;charset=UTF-8")

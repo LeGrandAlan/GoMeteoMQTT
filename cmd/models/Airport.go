@@ -5,9 +5,9 @@ import (
 )
 
 type Airport struct {
-	Id   string
-	Name string
-	City string
+	Id   string `example:"NTE"`
+	Name string `example:"Nantes Atlantique"`
+	City string `example:"Nantes"`
 }
 
 func (o Airport) String() string {
