@@ -44,7 +44,8 @@ func executeCronJob(
 	task func(client mqtt.Client, airportId, captorType string, captorId int, min, max float64),
 	client mqtt.Client, airportId, captorType string, captorId int, min, max float64) {
 
-	_ = gocron.Every(10).Second().Do(task, client, airportId, captorType, captorId, min, max)
+	_ = gocron.Every(1).Second().Do(task, client, airportId, captorType, captorId, min, max)
+
 	<-gocron.Start()
 
 }

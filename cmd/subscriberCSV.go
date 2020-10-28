@@ -20,7 +20,8 @@ func main() {
 
 	client := utils.Connect(utils.GetURIFromConf(), subscriberId)
 
-	filesname := make(map[string]*sync.Mutex)
+	fileMutex := &sync.Mutex{}
+
 	client.SubscribeMultiple(topics, func(client mqtt.Client, message mqtt.Message) {
 		content := string(message.Payload())
 		date := strings.Split(strings.Split(content, ";")[0], " ")[0]
@@ -28,15 +29,10 @@ func main() {
 		from := strings.Split(message.Topic(), "/")[2]
 		filename := airportCity + "-" + date + "-" + from + ".csv"
 
-		_, ok := filesname[filename]
-
-		if !ok {
-			filesname[filename] = &sync.Mutex{}
-		}
 
 		go fmt.Println(fmt.Sprintf("{ date: %s, city: %s, from: %s, content: %s}", date, airportCity, from, content))
 
-		go subscribers.PrepareFile(filename, filesname[filename]).Write(content)
+		go subscribers.PrepareFile(filename, fileMutex).Write(content)
 	})
 
 	for {
