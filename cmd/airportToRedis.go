@@ -4,6 +4,7 @@ import (
 	"./models"
 	"./pubsub/configUtils"
 	"./pubsub/subscribers"
+	"fmt"
 )
 
 func main() {
@@ -18,6 +19,8 @@ func main() {
 		_ = subscribers.HSetAirportIfNoExists(pool, airport)
 	}
 
-	_, _ = subscribers.ScanAirports(pool)
+	airports, _ := subscribers.ScanAirports(pool)
+
+	fmt.Println(airports)
 
 }

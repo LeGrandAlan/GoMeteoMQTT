@@ -59,7 +59,7 @@ func HGetAllCaptors(pool *redis.Pool, hash string) (CaptorValue, error) {
 	for i, s := range datas {
 		data := string(s.([]byte))
 		switch i {
-		case 1, 3, 5, 7, 9, 11, 13:
+		case 1, 3, 5, 7, 9, 11:
 			array = append(array, data)
 			break
 		}
@@ -99,8 +99,6 @@ func HGetAllAirports(pool *redis.Pool, hash string) (models.Airport, error) {
 	}
 
 	fetchedAirport := models.AirportMapper(airportMap)
-
-	fmt.Println(fetchedAirport)
 
 	return fetchedAirport, err
 
