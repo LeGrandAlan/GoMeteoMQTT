@@ -7,12 +7,12 @@ import (
 )
 
 type CaptorValue struct {
-	Id        int
-	CaptorId  int
-	AirportId string
-	Type      string
-	Date      time.Time
-	Value     float64
+	Id        int       `example:"326071054919270689"`
+	CaptorId  int       `example:"2"`
+	AirportId string    `example:"BDX"`
+	Type      string    `example:"wind"`
+	Date      time.Time `example:"2006-01-02 03:04:05"`
+	Value     float64   `example:"24.05"`
 }
 
 func (o CaptorValue) String() string {

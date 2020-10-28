@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/go-chi/chi"
 
-	//_ "./docs"
+	_ "./docs"
 
 	"log"
 	"net/http"
