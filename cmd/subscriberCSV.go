@@ -40,7 +40,7 @@ func GetTopicAirport(airports []interface{}) map[string]byte {
 	topics := make(map[string]byte)
 
 	for _, airport := range airports {
-		topics["/"+models.AirportMapper(airport.(map[string]interface{})).Name+"/+"] = 0
+		topics["/"+models.AirportMapper(airport.(map[string]interface{})).Id+"/+"] = 0
 	}
 
 	return topics
